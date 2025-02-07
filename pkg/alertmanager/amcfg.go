@@ -709,20 +709,20 @@ func (cb *configBuilder) convertReceiver(ctx context.Context, in *monitoringv1al
 	}
 
 	return &receiver{
-		Name:             makeNamespacedString(in.Name, crKey),
-		OpsgenieConfigs:  opsgenieConfigs,
-		PagerdutyConfigs: pagerdutyConfigs,
-		DiscordConfigs:   discordConfigs,
-		SlackConfigs:     slackConfigs,
-		WebhookConfigs:   webhookConfigs,
-		WeChatConfigs:    weChatConfigs,
-		EmailConfigs:     emailConfigs,
-		VictorOpsConfigs: victorOpsConfigs,
-		PushoverConfigs:  pushoverConfigs,
-		SNSConfigs:       snsConfigs,
-		TelegramConfigs:  telegramConfigs,
-		WebexConfigs:     webexConfigs,
-		MSTeamsConfigs:   msTeamsConfigs,
+		Name:              makeNamespacedString(in.Name, crKey),
+		OpsgenieConfigs:   opsgenieConfigs,
+		PagerdutyConfigs:  pagerdutyConfigs,
+		DiscordConfigs:    discordConfigs,
+		SlackConfigs:      slackConfigs,
+		WebhookConfigs:    webhookConfigs,
+		WeChatConfigs:     weChatConfigs,
+		EmailConfigs:      emailConfigs,
+		VictorOpsConfigs:  victorOpsConfigs,
+		PushoverConfigs:   pushoverConfigs,
+		SNSConfigs:        snsConfigs,
+		TelegramConfigs:   telegramConfigs,
+		WebexConfigs:      webexConfigs,
+		MSTeamsConfigs:    msTeamsConfigs,
 		RocketChatConfigs: rocketchatConfigs,
 	}, nil
 }
@@ -754,8 +754,6 @@ func (cb *configBuilder) convertRocketChatConfig(ctx context.Context, in monitor
 
 	return out, nil
 }
-
-
 
 func (cb *configBuilder) convertWebhookConfig(ctx context.Context, in monitoringv1alpha1.WebhookConfig, crKey types.NamespacedName) (*webhookConfig, error) {
 	out := &webhookConfig{
