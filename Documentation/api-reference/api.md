@@ -29420,7 +29420,7 @@ string
 <td>
 <em>(Optional)</em>
 <p>The API URL for RocketChat.
-Defaults to global.rocketchat_api_url if not specified.</p>
+Defaults to <a href="https://open.rocket.chat/">https://open.rocket.chat/</a> if not specified.</p>
 </td>
 </tr>
 <tr>
@@ -29432,8 +29432,7 @@ string
 </td>
 <td>
 <em>(Optional)</em>
-<p>The channel to send alerts to.
-Defaults to global.rocketchat_channel if not specified.</p>
+<p>The channel to send alerts to.</p>
 </td>
 </tr>
 <tr>
@@ -29447,7 +29446,7 @@ Kubernetes core/v1.SecretKeySelector
 </td>
 <td>
 <em>(Optional)</em>
-<p>The sender token (mutually exclusive with TokenFile).</p>
+<p>The sender token. Either Token or TokenFile is required.</p>
 </td>
 </tr>
 <tr>
@@ -29459,7 +29458,8 @@ string
 </td>
 <td>
 <em>(Optional)</em>
-<p>The file containing the sender token (mutually exclusive with Token).</p>
+<p>The file containing the sender token. Mutually exclusive with TokenFile
+Either Token or TokenFile is required.</p>
 </td>
 </tr>
 <tr>
@@ -29473,7 +29473,8 @@ Kubernetes core/v1.SecretKeySelector
 </td>
 <td>
 <em>(Optional)</em>
-<p>The sender token ID (mutually exclusive with TokenIDFile).</p>
+<p>The sender token ID. Mutually exclusive with TokenIDFile.
+Either TokenID or TokenIDFile is required.</p>
 </td>
 </tr>
 <tr>
@@ -29485,7 +29486,7 @@ string
 </td>
 <td>
 <em>(Optional)</em>
-<p>The file containing the sender token ID (mutually exclusive with TokenID).</p>
+<p>The file containing the sender token ID. Either TokenID or TokenIDFile is required.</p>
 </td>
 </tr>
 <tr>
@@ -29497,8 +29498,7 @@ string
 </td>
 <td>
 <em>(Optional)</em>
-<p>The message color.
-Defaults to &lsquo;{{ if eq .Status &ldquo;firing&rdquo; }}red{{ else }}green{{ end }}&rsquo;.</p>
+<p>The message color.</p>
 </td>
 </tr>
 <tr>
@@ -29510,8 +29510,7 @@ string
 </td>
 <td>
 <em>(Optional)</em>
-<p>Emoji to use for the message.
-Defaults to &lsquo;{{ template &ldquo;rocketchat.default.emoji&rdquo; . }}&rsquo;.</p>
+<p>If provided, the avatar will be displayed as an emoji.</p>
 </td>
 </tr>
 <tr>
@@ -29523,8 +29522,7 @@ string
 </td>
 <td>
 <em>(Optional)</em>
-<p>Icon URL for the message.
-Defaults to &lsquo;{{ template &ldquo;rocketchat.default.iconurl&rdquo; . }}&rsquo;.</p>
+<p>Icon URL for the message.</p>
 </td>
 </tr>
 <tr>
@@ -29536,8 +29534,7 @@ string
 </td>
 <td>
 <em>(Optional)</em>
-<p>The main message text.
-Defaults to &lsquo;{{ template &ldquo;rocketchat.default.text&rdquo; . }}&rsquo;.</p>
+<p>The main message text.</p>
 </td>
 </tr>
 <tr>
@@ -29549,8 +29546,7 @@ string
 </td>
 <td>
 <em>(Optional)</em>
-<p>The message title.
-Defaults to &lsquo;{{ template &ldquo;rocketchat.default.title&rdquo; . }}&rsquo;.</p>
+<p>The message title.</p>
 </td>
 </tr>
 <tr>
@@ -29562,8 +29558,7 @@ string
 </td>
 <td>
 <em>(Optional)</em>
-<p>The title link for the message.
-Defaults to &lsquo;{{ template &ldquo;rocketchat.default.titlelink&rdquo; . }}&rsquo;.</p>
+<p>The title link for the message.</p>
 </td>
 </tr>
 <tr>
@@ -29589,8 +29584,7 @@ bool
 </td>
 <td>
 <em>(Optional)</em>
-<p>Whether to use short fields.
-Defaults to false.</p>
+<p>Whether to use short fields.</p>
 </td>
 </tr>
 <tr>
@@ -34652,7 +34646,7 @@ string
 <td>
 <em>(Optional)</em>
 <p>The API URL for RocketChat.
-Defaults to global.rocketchat_api_url if not specified.</p>
+Defaults to <a href="https://open.rocket.chat/">https://open.rocket.chat/</a> if not specified.</p>
 </td>
 </tr>
 <tr>
@@ -34664,8 +34658,7 @@ string
 </td>
 <td>
 <em>(Optional)</em>
-<p>The channel to send alerts to.
-Defaults to global.rocketchat_channel if not specified.</p>
+<p>The channel to send alerts to.</p>
 </td>
 </tr>
 <tr>
@@ -34679,7 +34672,7 @@ Kubernetes core/v1.SecretKeySelector
 </td>
 <td>
 <em>(Optional)</em>
-<p>The sender token (mutually exclusive with TokenFile).</p>
+<p>The sender token. Either Token or TokenFile is required.</p>
 </td>
 </tr>
 <tr>
@@ -34691,7 +34684,8 @@ string
 </td>
 <td>
 <em>(Optional)</em>
-<p>The file containing the sender token (mutually exclusive with Token).</p>
+<p>The file containing the sender token. Mutually exclusive with TokenFile
+Either Token or TokenFile is required.</p>
 </td>
 </tr>
 <tr>
@@ -34705,7 +34699,8 @@ Kubernetes core/v1.SecretKeySelector
 </td>
 <td>
 <em>(Optional)</em>
-<p>The sender token ID (mutually exclusive with TokenIDFile).</p>
+<p>The sender token ID. Mutually exclusive with TokenIDFile.
+Either TokenID or TokenIDFile is required.</p>
 </td>
 </tr>
 <tr>
@@ -34717,7 +34712,7 @@ string
 </td>
 <td>
 <em>(Optional)</em>
-<p>The file containing the sender token ID (mutually exclusive with TokenID).</p>
+<p>The file containing the sender token ID. Either TokenID or TokenIDFile is required.</p>
 </td>
 </tr>
 <tr>
@@ -34729,8 +34724,7 @@ string
 </td>
 <td>
 <em>(Optional)</em>
-<p>The message color.
-Defaults to &lsquo;{{ if eq .Status &ldquo;firing&rdquo; }}red{{ else }}green{{ end }}&rsquo;.</p>
+<p>The message color.</p>
 </td>
 </tr>
 <tr>
@@ -34742,8 +34736,7 @@ string
 </td>
 <td>
 <em>(Optional)</em>
-<p>Emoji to use for the message.
-Defaults to &lsquo;{{ template &ldquo;rocketchat.default.emoji&rdquo; . }}&rsquo;.</p>
+<p>If provided, the avatar will be displayed as an emoji.</p>
 </td>
 </tr>
 <tr>
@@ -34755,8 +34748,7 @@ string
 </td>
 <td>
 <em>(Optional)</em>
-<p>Icon URL for the message.
-Defaults to &lsquo;{{ template &ldquo;rocketchat.default.iconurl&rdquo; . }}&rsquo;.</p>
+<p>Icon URL for the message.</p>
 </td>
 </tr>
 <tr>
@@ -34768,8 +34760,7 @@ string
 </td>
 <td>
 <em>(Optional)</em>
-<p>The main message text.
-Defaults to &lsquo;{{ template &ldquo;rocketchat.default.text&rdquo; . }}&rsquo;.</p>
+<p>The main message text.</p>
 </td>
 </tr>
 <tr>
@@ -34781,8 +34772,7 @@ string
 </td>
 <td>
 <em>(Optional)</em>
-<p>The message title.
-Defaults to &lsquo;{{ template &ldquo;rocketchat.default.title&rdquo; . }}&rsquo;.</p>
+<p>The message title.</p>
 </td>
 </tr>
 <tr>
@@ -34794,8 +34784,7 @@ string
 </td>
 <td>
 <em>(Optional)</em>
-<p>The title link for the message.
-Defaults to &lsquo;{{ template &ldquo;rocketchat.default.titlelink&rdquo; . }}&rsquo;.</p>
+<p>The title link for the message.</p>
 </td>
 </tr>
 <tr>
@@ -34821,8 +34810,7 @@ bool
 </td>
 <td>
 <em>(Optional)</em>
-<p>Whether to use short fields.
-Defaults to false.</p>
+<p>Whether to use short fields.</p>
 </td>
 </tr>
 <tr>
@@ -34940,8 +34928,7 @@ bool
 </td>
 <td>
 <em>(Optional)</em>
-<p>Whether the field is displayed in a compact form.
-Defaults to the value of <code>rocketchat_config.short_fields</code>.</p>
+<p>Whether the field is displayed in a compact form.</p>
 </td>
 </tr>
 </tbody>
