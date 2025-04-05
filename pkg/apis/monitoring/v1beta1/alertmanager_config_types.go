@@ -959,7 +959,7 @@ type MSTeamsConfig struct {
 }
 
 // RocketChatConfig configures notifications via RocketChat.
-// See https://prometheus.io/docs/alerting/latest/configuration/#rocketchat_config
+// It requires Alertmanager >= 0.28.0.
 type RocketChatConfig struct {
 	// Whether to notify about resolved alerts.
 	// +optional
@@ -967,7 +967,7 @@ type RocketChatConfig struct {
 	// The API URL for RocketChat.
 	// Defaults to https://open.rocket.chat/ if not specified.
 	// +optional
-	APIURL *string `json:"apiURL,omitempty"`
+	APIURL *URL `json:"apiURL,omitempty"`
 	// The channel to send alerts to.
 	// +optional
 	Channel *string `json:"channel,omitempty"`
@@ -993,7 +993,7 @@ type RocketChatConfig struct {
 	Emoji *string `json:"emoji,omitempty"`
 	// Icon URL for the message.
 	// +optional
-	IconURL *string `json:"iconURL,omitempty"`
+	IconURL *URL `json:"iconURL,omitempty"`
 	// The main message text.
 	// +optional
 	Text *string `json:"text,omitempty"`
@@ -1011,10 +1011,10 @@ type RocketChatConfig struct {
 	ShortFields *bool `json:"shortFields,omitempty"`
 	// Image URL for the message.
 	// +optional
-	ImageURL *string `json:"imageURL,omitempty"`
+	ImageURL *URL `json:"imageURL,omitempty"`
 	// Thumbnail URL for the message.
 	// +optional
-	ThumbURL *string `json:"thumbURL,omitempty"`
+	ThumbURL *URL `json:"thumbURL,omitempty"`
 	// Whether to enable link names.
 	// +optional
 	LinkNames *bool `json:"linkNames,omitempty"`
@@ -1041,16 +1041,12 @@ type RocketChatFieldConfig struct {
 
 // RocketChatActionConfig defines actions for RocketChat messages.
 type RocketChatActionConfig struct {
-	// The type of action (only "button" is supported).
-	// This field is ignored in Alertmanager.
-	// +optional
-	Type *string `json:"type,omitempty"`
 	// The button text.
 	// +optional
 	Text *string `json:"text,omitempty"`
 	// The URL the button links to.
 	// +optional
-	URL *string `json:"url,omitempty"`
+	URL *URL `json:"url,omitempty"`
 	// The message to send when the button is clicked.
 	// +optional
 	Msg *string `json:"msg,omitempty"`

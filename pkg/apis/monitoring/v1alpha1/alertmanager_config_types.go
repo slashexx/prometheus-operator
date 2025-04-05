@@ -969,7 +969,6 @@ type MSTeamsConfig struct {
 
 // RocketChatConfig configures notifications via RocketChat.
 // It requires Alertmanager >= 0.28.0.
-// See https://prometheus.io/docs/alerting/latest/configuration/#rocketchat_config
 type RocketChatConfig struct {
 	// Whether to notify about resolved alerts.
 	// +optional
@@ -977,20 +976,20 @@ type RocketChatConfig struct {
 	// The API URL for RocketChat.
 	// Defaults to https://open.rocket.chat/ if not specified.
 	// +optional
-	APIURL *string `json:"apiURL,omitempty"`
+	APIURL *URL `json:"apiURL,omitempty"`
 	// The channel to send alerts to.
 	// +optional
 	Channel *string `json:"channel,omitempty"`
-	// The sender token. Either Token or TokenFile is required.
+	// The sender token. Either `token` or `tokenFile` is required.
 	// +optional
 	Token v1.SecretKeySelector `json:"token,omitempty"`
-	// The file containing the sender token. Either Token or TokenFile is required.
+	// The file containing the sender token. Either `token` or `tokenFile` is required.
 	// +optional
 	TokenFile *string `json:"tokenFile,omitempty"`
-	// The sender token ID. Either TokenID or TokenIDFile is required.
+	// The sender token ID. Either `tokenID` or `tokenIDFile` is required.
 	// +optional
 	TokenID v1.SecretKeySelector `json:"tokenID,omitempty"`
-	// The file containing the sender token ID. Either TokenID or TokenIDFile is required.
+	// The file containing the sender token ID. Either `tokenID` or `tokenIDFile` is required.
 	// +optional
 	TokenIDFile *string `json:"tokenIDFile,omitempty"`
 	// The message color.
@@ -1001,7 +1000,7 @@ type RocketChatConfig struct {
 	Emoji *string `json:"emoji,omitempty"`
 	// Icon URL for the message.
 	// +optional
-	IconURL *string `json:"iconURL,omitempty"`
+	IconURL *URL `json:"iconURL,omitempty"`
 	// The message text to send, it is optional because of attachments.
 	// +optional
 	Text *string `json:"text,omitempty"`
@@ -1019,10 +1018,10 @@ type RocketChatConfig struct {
 	ShortFields *bool `json:"shortFields,omitempty"`
 	// Image URL for the message.
 	// +optional
-	ImageURL *string `json:"imageURL,omitempty"`
+	ImageURL *URL `json:"imageURL,omitempty"`
 	// Thumbnail URL for the message.
 	// +optional
-	ThumbURL *string `json:"thumbURL,omitempty"`
+	ThumbURL *URL `json:"thumbURL,omitempty"`
 	// Whether to enable link names.
 	// +optional
 	LinkNames *bool `json:"linkNames,omitempty"`
@@ -1049,15 +1048,12 @@ type RocketChatFieldConfig struct {
 
 // RocketChatActionConfig defines actions for RocketChat messages.
 type RocketChatActionConfig struct {
-	// The type of action (only "button" is supported).
-	// +optional
-	Type *string `json:"type,omitempty"`
 	// The button text.
 	// +optional
 	Text *string `json:"text,omitempty"`
 	// The URL the button links to.
 	// +optional
-	URL *string `json:"url,omitempty"`
+	URL *URL `json:"url,omitempty"`
 	// The message to send when the button is clicked.
 	// +optional
 	Msg *string `json:"msg,omitempty"`

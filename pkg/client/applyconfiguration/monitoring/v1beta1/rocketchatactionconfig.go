@@ -16,27 +16,22 @@
 
 package v1beta1
 
+import (
+	monitoringv1beta1 "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1beta1"
+)
+
 // RocketChatActionConfigApplyConfiguration represents a declarative configuration of the RocketChatActionConfig type for use
 // with apply.
 type RocketChatActionConfigApplyConfiguration struct {
-	Type *string `json:"type,omitempty"`
-	Text *string `json:"text,omitempty"`
-	URL  *string `json:"url,omitempty"`
-	Msg  *string `json:"msg,omitempty"`
+	Text *string                `json:"text,omitempty"`
+	URL  *monitoringv1beta1.URL `json:"url,omitempty"`
+	Msg  *string                `json:"msg,omitempty"`
 }
 
 // RocketChatActionConfigApplyConfiguration constructs a declarative configuration of the RocketChatActionConfig type for use with
 // apply.
 func RocketChatActionConfig() *RocketChatActionConfigApplyConfiguration {
 	return &RocketChatActionConfigApplyConfiguration{}
-}
-
-// WithType sets the Type field in the declarative configuration to the given value
-// and returns the receiver, so that objects can be built by chaining "With" function invocations.
-// If called multiple times, the Type field is set to the value of the last call.
-func (b *RocketChatActionConfigApplyConfiguration) WithType(value string) *RocketChatActionConfigApplyConfiguration {
-	b.Type = &value
-	return b
 }
 
 // WithText sets the Text field in the declarative configuration to the given value
@@ -50,7 +45,7 @@ func (b *RocketChatActionConfigApplyConfiguration) WithText(value string) *Rocke
 // WithURL sets the URL field in the declarative configuration to the given value
 // and returns the receiver, so that objects can be built by chaining "With" function invocations.
 // If called multiple times, the URL field is set to the value of the last call.
-func (b *RocketChatActionConfigApplyConfiguration) WithURL(value string) *RocketChatActionConfigApplyConfiguration {
+func (b *RocketChatActionConfigApplyConfiguration) WithURL(value monitoringv1beta1.URL) *RocketChatActionConfigApplyConfiguration {
 	b.URL = &value
 	return b
 }

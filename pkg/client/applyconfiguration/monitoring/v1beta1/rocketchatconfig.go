@@ -17,6 +17,7 @@
 package v1beta1
 
 import (
+	monitoringv1beta1 "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1beta1"
 	v1 "k8s.io/api/core/v1"
 )
 
@@ -24,7 +25,7 @@ import (
 // with apply.
 type RocketChatConfigApplyConfiguration struct {
 	SendResolved *bool                                      `json:"sendResolved,omitempty"`
-	APIURL       *string                                    `json:"apiURL,omitempty"`
+	APIURL       *monitoringv1beta1.URL                     `json:"apiURL,omitempty"`
 	Channel      *string                                    `json:"channel,omitempty"`
 	Token        *v1.SecretKeySelector                      `json:"token,omitempty"`
 	TokenFile    *string                                    `json:"tokenFile,omitempty"`
@@ -32,14 +33,14 @@ type RocketChatConfigApplyConfiguration struct {
 	TokenIDFile  *string                                    `json:"tokenIDFile,omitempty"`
 	Color        *string                                    `json:"color,omitempty"`
 	Emoji        *string                                    `json:"emoji,omitempty"`
-	IconURL      *string                                    `json:"iconURL,omitempty"`
+	IconURL      *monitoringv1beta1.URL                     `json:"iconURL,omitempty"`
 	Text         *string                                    `json:"text,omitempty"`
 	Title        *string                                    `json:"title,omitempty"`
 	TitleLink    *string                                    `json:"titleLink,omitempty"`
 	Fields       []RocketChatFieldConfigApplyConfiguration  `json:"fields,omitempty"`
 	ShortFields  *bool                                      `json:"shortFields,omitempty"`
-	ImageURL     *string                                    `json:"imageURL,omitempty"`
-	ThumbURL     *string                                    `json:"thumbURL,omitempty"`
+	ImageURL     *monitoringv1beta1.URL                     `json:"imageURL,omitempty"`
+	ThumbURL     *monitoringv1beta1.URL                     `json:"thumbURL,omitempty"`
 	LinkNames    *bool                                      `json:"linkNames,omitempty"`
 	Actions      []RocketChatActionConfigApplyConfiguration `json:"actions,omitempty"`
 	HTTPConfig   *HTTPConfigApplyConfiguration              `json:"httpConfig,omitempty"`
@@ -62,7 +63,7 @@ func (b *RocketChatConfigApplyConfiguration) WithSendResolved(value bool) *Rocke
 // WithAPIURL sets the APIURL field in the declarative configuration to the given value
 // and returns the receiver, so that objects can be built by chaining "With" function invocations.
 // If called multiple times, the APIURL field is set to the value of the last call.
-func (b *RocketChatConfigApplyConfiguration) WithAPIURL(value string) *RocketChatConfigApplyConfiguration {
+func (b *RocketChatConfigApplyConfiguration) WithAPIURL(value monitoringv1beta1.URL) *RocketChatConfigApplyConfiguration {
 	b.APIURL = &value
 	return b
 }
@@ -126,7 +127,7 @@ func (b *RocketChatConfigApplyConfiguration) WithEmoji(value string) *RocketChat
 // WithIconURL sets the IconURL field in the declarative configuration to the given value
 // and returns the receiver, so that objects can be built by chaining "With" function invocations.
 // If called multiple times, the IconURL field is set to the value of the last call.
-func (b *RocketChatConfigApplyConfiguration) WithIconURL(value string) *RocketChatConfigApplyConfiguration {
+func (b *RocketChatConfigApplyConfiguration) WithIconURL(value monitoringv1beta1.URL) *RocketChatConfigApplyConfiguration {
 	b.IconURL = &value
 	return b
 }
@@ -179,7 +180,7 @@ func (b *RocketChatConfigApplyConfiguration) WithShortFields(value bool) *Rocket
 // WithImageURL sets the ImageURL field in the declarative configuration to the given value
 // and returns the receiver, so that objects can be built by chaining "With" function invocations.
 // If called multiple times, the ImageURL field is set to the value of the last call.
-func (b *RocketChatConfigApplyConfiguration) WithImageURL(value string) *RocketChatConfigApplyConfiguration {
+func (b *RocketChatConfigApplyConfiguration) WithImageURL(value monitoringv1beta1.URL) *RocketChatConfigApplyConfiguration {
 	b.ImageURL = &value
 	return b
 }
@@ -187,7 +188,7 @@ func (b *RocketChatConfigApplyConfiguration) WithImageURL(value string) *RocketC
 // WithThumbURL sets the ThumbURL field in the declarative configuration to the given value
 // and returns the receiver, so that objects can be built by chaining "With" function invocations.
 // If called multiple times, the ThumbURL field is set to the value of the last call.
-func (b *RocketChatConfigApplyConfiguration) WithThumbURL(value string) *RocketChatConfigApplyConfiguration {
+func (b *RocketChatConfigApplyConfiguration) WithThumbURL(value monitoringv1beta1.URL) *RocketChatConfigApplyConfiguration {
 	b.ThumbURL = &value
 	return b
 }
