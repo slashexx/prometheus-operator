@@ -72,6 +72,16 @@ The current [PrometheusAgent CRD](https://prometheus-operator.dev/docs/platform/
 
 We will add a new `mode` field that accepts either `StatefulSet` or `DaemonSet`, with `StatefulSet` being the default. If the DaemonSet mode is activated (`mode: DaemonSet`), all the unrelated fields listed above will not be accepted. In the MVP, we will simply fail the reconciliation if any of those fields are set. We will prevent users to directly switch from a live StatefulSet setup to DaemonSet, because that might break their workload if they forget to unset the unsupported fields. Following up, we will leverage validation rules with [Kubernetes' Common Expression Language (CEL)](https://kubernetes.io/docs/reference/using-api/cel/). Only then, we will allow switching from a live StatefulSet setup to DaemonSet. We already have an issue for CEL [here](https://github.com/prometheus-operator/prometheus-operator/issues/5079).
 
+#### 6.1.1 CEL Validation rules
+To prevent users from accidentally providing invalid configurations, we will implement validation rules using [Kubernetes' Common Expression Language (CEL)](https://kubernetes.io/docs/reference/using-api/cel/).
+
+These CEL rules will:
+- Prevent setting replicas when in DaemonSet mode
+- Prevent setting storage configuration in DaemonSet mode
+- Prevent using ServiceMonitorSelector in DaemonSet mode
+- Prevent using VolumeClaimTemplates in DaemonSet mode
+- Require PodMonitorSelector in DaemonSet mode
+
 ### 6.2. Node detecting:
 
 As pointed out in [Danny from GMP’s talk](https://www.youtube.com/watch?v=yk2aaAyxgKw), to make Prometheus Agent DaemonSet know which node it’s on, we can use [Kubernetes’ downward API](https://kubernetes.io/docs/tasks/inject-data-application/environment-variable-expose-pod-information/). In `config-reloader` container, we can mount the node name as an environment variable like this:
