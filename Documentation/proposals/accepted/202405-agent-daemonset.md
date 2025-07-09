@@ -56,16 +56,7 @@ In specific, the MVP will need to:
 * Allow users to restrict which set of nodes they want to deploy Prometheus Agent, if desired.
 * Allow users to set the priority of Prometheus Agent pod compared to other pods on the same node, if desired.
 * Allow each Prometheus Agent pod to only scrape from the pods from PodMonitor that run on the same node.
-* Explore the EndpointSlices API for a scalable implementation of ServiceMonitors with the Daemonset Mode. 
-
-### 4.1. ServiceMonitor Support with EndpointSlice (Extended Goal)
-
-Building upon the MVP, enable ServiceMonitor support for DaemonSet mode by leveraging EndpointSlice discovery to address the performance concerns mentioned in the non-goals section. This extended implementation includes:
-
-* **EndpointSlice Integration**: Explore support for `serviceDiscoveryRole: EndpointSlice` in PrometheusAgent CRD to use EndpointSlice API instead of classic Endpoints for service discovery.
-* **Performance Optimization**: Potentially reduce Kubernetes API server load by using the more efficient and scalable EndpointSlice API, which distributes endpoint information across multiple smaller objects instead of one large Endpoints object.
-* **DaemonSet Compatibility**: Ensure EndpointSlice discovery works correctly with DaemonSet mode for node-local service monitoring.
-* **Validation and Fallback**: Implement proper validation to ensure EndpointSlice is only used when supported by the Kubernetes cluster (v1.21+), with graceful fallback to classic Endpoints on older clusters.
+* Enable ServiceMonitor support for DaemonSet mode using EndpointSlice discovery (extended goal).
 
 ## 5. Non-Goals
 
@@ -124,10 +115,16 @@ This is mainly because :
 ```go
 if spec.Mode == "DaemonSet" {
 	if spec.Replicas != nil {
-		return fmt.Errorf("replicas is not allowed when using DaemonSet mode")
+		return fmt.Errorf("cannot configure replicas when using DaemonSet mode")
 	}
 	if spec.Storage != nil {
-		return fmt.Errorf("storage configuration is not supported in DaemonSet mode")
+		return fmt.Errorf("cannot configure storage when using DaemonSet mode")
+	}
+	if spec.Shards != nil {
+		return fmt.Errorf("cannot configure shards when using DaemonSet mode")
+	}
+	if spec.PersistentVolumeClaimRetentionPolicy != nil {
+		return fmt.Errorf("cannot configure persistentVolumeClaimRetentionPolicy when using DaemonSet mode")
 	}
 }
 ```
@@ -162,6 +159,62 @@ kubernetes_sd_configs:
 We'll go with this option, because it filters targets right at discovery time, and also because Kubernetes API server watch cache indexes pods by node name (as we can see in [Kubernetes codebase](https://github.com/kubernetes/kubernetes/blob/v1.30.0-rc.0/pkg/registry/core/pod/storage/storage.go#L91)).
 
 We've also considered using relabel config that filters pods by `__meta_kubernetes_pod_node_name` label. However, we didn't choose to go with this option because it filters pods only after discovering all the pods from PodMonitor, which increases load on Kubernetes API server.
+
+### 6.4. ServiceMonitor Support with EndpointSlice
+
+To enable ServiceMonitor support for DaemonSet mode while addressing the performance concerns mentioned in section 5, we implement EndpointSlice-based service discovery:
+
+#### 6.4.1. EndpointSlice Discovery Implementation
+
+The PrometheusAgent CRD already supports a `serviceDiscoveryRole` field that can be set to `EndpointSlice`:
+
+```yaml
+apiVersion: monitoring.coreos.com/v1alpha1
+kind: PrometheusAgent
+spec:
+  mode: DaemonSet
+  serviceDiscoveryRole: EndpointSlice  # Use EndpointSlice instead of Endpoints
+  serviceMonitorSelector:
+    matchLabels:
+      team: platform
+```
+
+When `serviceDiscoveryRole: EndpointSlice` is specified, the generated Prometheus configuration will use:
+
+```yaml
+scrape_configs:
+- job_name: serviceMonitor/default/my-service/0
+  kubernetes_sd_configs:
+  - role: endpointslice  # Instead of "endpoints"
+    namespaces:
+      names: [default]
+```
+
+#### 6.4.2. Performance Benefits
+
+EndpointSlice provides significant performance improvements over classic Endpoints:
+* **Scalability**: EndpointSlice objects are limited to 1000 endpoints each, preventing massive objects
+* **Efficiency**: Multiple smaller objects reduce memory usage and network traffic
+* **Parallel Processing**: Multiple EndpointSlice objects can be processed in parallel
+* **Reduced API Server Load**: Less stress on Kubernetes API server with distributed endpoint information
+
+#### 6.4.3. Implementation Details
+
+The implementation properly handles EndpointSlice support by checking both the user's `serviceDiscoveryRole` setting and cluster compatibility. The logic involves:
+
+```go
+// Check if THIS PrometheusAgent wants EndpointSlice discovery
+cpf := p.GetCommonPrometheusFields()
+if ptr.Deref(cpf.ServiceDiscoveryRole, monitoringv1.EndpointsRole) == monitoringv1.EndpointSliceRole {
+    if c.endpointSliceSupported {
+        opts = append(opts, prompkg.WithEndpointSliceSupport())
+    } else {
+        // Warn user that they want EndpointSlice but cluster doesn't support it
+        c.logger.Warn("EndpointSlice requested but not supported by Kubernetes cluster")
+        // Fall back to classic endpoints
+    }
+}
+```
 
 ## 7. Action Plan
 
