@@ -90,10 +90,11 @@ We will add a new `mode` field that accepts either `StatefulSet` or `DaemonSet`,
 
 When `mode:DaemonSet`, the following CEL rules will be applied:
 
-- `replicas` 
-- `storage`  
-- `shards` 
-- `persistentVolumeClaimRetentionPolicy` 
+- `replicas`
+- `storage`
+- `shards`
+- `persistentVolumeClaimRetentionPolicy`
+- `scrapeConfigSelector`
 
 This is implemented by adding `x-kubernetes-validations` like:
 
@@ -101,9 +102,17 @@ This is implemented by adding `x-kubernetes-validations` like:
 x-kubernetes-validations:
   - rule: "self.mode == 'DaemonSet' ? !has(self.replicas) : true"
     message: "replicas field is not allowed when mode is 'DaemonSet'"
+  - rule: "self.mode == 'DaemonSet' ? !has(self.storage) : true"
+    message: "storage field is not allowed when mode is 'DaemonSet'"
+  - rule: "self.mode == 'DaemonSet' ? !has(self.shards) : true"
+    message: "shards field is not allowed when mode is 'DaemonSet'"
+  - rule: "self.mode == 'DaemonSet' ? !has(self.persistentVolumeClaimRetentionPolicy) : true"
+    message: "persistentVolumeClaimRetentionPolicy field is not allowed when mode is 'DaemonSet'"
+  - rule: "!(has(self.mode) && self.mode == 'DaemonSet' && has(self.scrapeConfigSelector))"
+    message: "scrapeConfigSelector cannot be set when mode is DaemonSet"
 ```
 
-#### 6.1.2 Runtime Validation Logic as Fallback 
+#### 6.1.2 Runtime Validation Logic as Fallback
 
 CEL validation will provide immediate feedback during `kubectl apply` but we will need runtime validation logic in the controller as a fallback mechanism. This fallback will be integrated directly in the `PrometheusAgent` reconciler loop.
 
@@ -125,6 +134,9 @@ if spec.Mode == "DaemonSet" {
 	}
 	if spec.PersistentVolumeClaimRetentionPolicy != nil {
 		return fmt.Errorf("cannot configure persistentVolumeClaimRetentionPolicy when using DaemonSet mode")
+	}
+	if spec.ScrapeConfigSelector != nil {
+		return fmt.Errorf("cannot configure scrapeConfigSelector when using DaemonSet mode")
 	}
 }
 ```
@@ -160,11 +172,15 @@ We'll go with this option, because it filters targets right at discovery time, a
 
 We've also considered using relabel config that filters pods by `__meta_kubernetes_pod_node_name` label. However, we didn't choose to go with this option because it filters pods only after discovering all the pods from PodMonitor, which increases load on Kubernetes API server.
 
-### 6.4. ServiceMonitor Support with EndpointSlice
+## Secondary goals (new feature gate)
+
+> **Note:** We are exploring the integration of ServiceMonitor support for DaemonSet mode using EndpointSlice as an experimental feature. This exploration will determine feasibility and performance, and if viable, it may be introduced behind a separate feature gate. This approach allows the main DaemonSet mode to reach GA independently of this feature.
+
+### ServiceMonitor Support with EndpointSlice
 
 To enable ServiceMonitor support for DaemonSet mode while addressing the performance concerns mentioned in section 5, we implement EndpointSlice-based service discovery:
 
-#### 6.4.1. EndpointSlice Discovery Implementation
+#### EndpointSlice Discovery Implementation
 
 The PrometheusAgent CRD already supports a `serviceDiscoveryRole` field that can be set to `EndpointSlice`:
 
@@ -190,7 +206,7 @@ scrape_configs:
       names: [default]
 ```
 
-#### 6.4.2. Performance Benefits
+#### Performance Benefits
 
 EndpointSlice provides significant performance improvements over classic Endpoints:
 * **Scalability**: EndpointSlice objects are limited to 1000 endpoints each, preventing massive objects
@@ -198,7 +214,7 @@ EndpointSlice provides significant performance improvements over classic Endpoin
 * **Parallel Processing**: Multiple EndpointSlice objects can be processed in parallel
 * **Reduced API Server Load**: Less stress on Kubernetes API server with distributed endpoint information
 
-#### 6.4.3. Implementation Details
+#### Implementation Details
 
 The implementation properly handles EndpointSlice support by checking both the user's `serviceDiscoveryRole` setting and cluster compatibility. The logic involves:
 
@@ -206,13 +222,13 @@ The implementation properly handles EndpointSlice support by checking both the u
 // Check if THIS PrometheusAgent wants EndpointSlice discovery
 cpf := p.GetCommonPrometheusFields()
 if ptr.Deref(cpf.ServiceDiscoveryRole, monitoringv1.EndpointsRole) == monitoringv1.EndpointSliceRole {
-    if c.endpointSliceSupported {
-        opts = append(opts, prompkg.WithEndpointSliceSupport())
-    } else {
-        // Warn user that they want EndpointSlice but cluster doesn't support it
-        c.logger.Warn("EndpointSlice requested but not supported by Kubernetes cluster")
-        // Fall back to classic endpoints
-    }
+	if c.endpointSliceSupported {
+		opts = append(opts, prompkg.WithEndpointSliceSupport())
+	} else {
+		// Warn user that they want EndpointSlice but cluster doesn't support it
+		c.logger.Warn("EndpointSlice requested but not supported by Kubernetes cluster")
+		// Fall back to classic endpoints
+	}
 }
 ```
 
