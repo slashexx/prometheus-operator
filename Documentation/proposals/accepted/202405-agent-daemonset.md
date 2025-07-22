@@ -56,7 +56,6 @@ In specific, the MVP will need to:
 * Allow users to restrict which set of nodes they want to deploy Prometheus Agent, if desired.
 * Allow users to set the priority of Prometheus Agent pod compared to other pods on the same node, if desired.
 * Allow each Prometheus Agent pod to only scrape from the pods from PodMonitor that run on the same node.
-* Enable ServiceMonitor support for DaemonSet mode using EndpointSlice discovery (extended goal).
 
 ## 5. Non-Goals
 
@@ -172,7 +171,7 @@ We'll go with this option, because it filters targets right at discovery time, a
 
 We've also considered using relabel config that filters pods by `__meta_kubernetes_pod_node_name` label. However, we didn't choose to go with this option because it filters pods only after discovering all the pods from PodMonitor, which increases load on Kubernetes API server.
 
-## Secondary goals (new feature gate)
+## Secondary/Extended goal (new feature gate)
 
 > **Note:** We are exploring the integration of ServiceMonitor support for DaemonSet mode using EndpointSlice as an experimental feature. This exploration will determine feasibility and performance, and if viable, it may be introduced behind a separate feature gate. This approach allows the main DaemonSet mode to reach GA independently of this feature.
 
