@@ -282,3 +282,4 @@ spec:
   - port: metrics
     path: /metrics
 ```
+Continue with the [Getting Started page]({{<ref "docs/developer/getting-started.md">}}) to learn how to monitor applications running on Kubernetes.
