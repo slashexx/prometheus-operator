@@ -94,6 +94,12 @@ When `mode:DaemonSet`, the following CEL rules will be applied:
 - `shards`
 - `persistentVolumeClaimRetentionPolicy`
 - `scrapeConfigSelector`
+- `scrapeConfigNamespaceSelector`
+- `probeSelector`
+- `probeNamespaceSelector`
+- `serviceMonitorSelector`
+- `serviceMonitorNamespaceSelector`
+- `additionalScrapeConfigs`
 
 This is implemented by adding `x-kubernetes-validations` like:
 
@@ -109,6 +115,18 @@ x-kubernetes-validations:
     message: "persistentVolumeClaimRetentionPolicy field is not allowed when mode is 'DaemonSet'"
   - rule: "!(has(self.mode) && self.mode == 'DaemonSet' && has(self.scrapeConfigSelector))"
     message: "scrapeConfigSelector cannot be set when mode is DaemonSet"
+  - rule: "!(has(self.mode) && self.mode == 'DaemonSet' && has(self.probeSelector))"
+    message: "probeSelector cannot be set when mode is DaemonSet"
+  - rule: "!(has(self.mode) && self.mode == 'DaemonSet' && has(self.probeNamespaceSelector))"
+    message: "probeNamespaceSelector cannot be set when mode is DaemonSet"
+  - rule: "!(has(self.mode) && self.mode == 'DaemonSet' && has(self.scrapeConfigNamespaceSelector))"
+    message: "scrapeConfigNamespaceSelector cannot be set when mode is DaemonSet"
+  - rule: "!(has(self.mode) && self.mode == 'DaemonSet' && has(self.serviceMonitorSelector))"
+    message: "serviceMonitorSelector cannot be set when mode is DaemonSet"
+  - rule: "!(has(self.mode) && self.mode == 'DaemonSet' && has(self.serviceMonitorNamespaceSelector))"
+    message: "serviceMonitorNamespaceSelector cannot be set when mode is DaemonSet"
+  - rule: "!(has(self.mode) && self.mode == 'DaemonSet' && has(self.additionalScrapeConfigs))"
+    message: "additionalScrapeConfigs cannot be set when mode is DaemonSet"
 ```
 
 #### 6.1.2 Runtime Validation Logic as Fallback
@@ -136,6 +154,24 @@ if spec.Mode == "DaemonSet" {
 	}
 	if spec.ScrapeConfigSelector != nil {
 		return fmt.Errorf("cannot configure scrapeConfigSelector when using DaemonSet mode")
+	}
+	if spec.ProbeSelector != nil {
+		return fmt.Errorf("cannot configure probeSelector when using DaemonSet mode")
+	}
+	if spec.ProbeNamespaceSelector != nil {
+		return fmt.Errorf("cannot configure probeNamespaceSelector when using DaemonSet mode")
+	}
+	if spec.ScrapeConfigNamespaceSelector != nil {
+		return fmt.Errorf("cannot configure scrapeConfigNamespaceSelector when using DaemonSet mode")
+	}
+	if spec.ServiceMonitorSelector != nil {
+		return fmt.Errorf("cannot configure serviceMonitorSelector when using DaemonSet mode")
+	}
+	if spec.ServiceMonitorNamespaceSelector != nil {
+		return fmt.Errorf("cannot configure serviceMonitorNamespaceSelector when using DaemonSet mode")
+	}
+	if spec.AdditionalScrapeConfigs != nil {
+		return fmt.Errorf("cannot configure additionalScrapeConfigs when using DaemonSet mode")
 	}
 }
 ```
