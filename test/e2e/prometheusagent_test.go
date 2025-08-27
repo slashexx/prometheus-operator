@@ -857,7 +857,7 @@ func testPrometheusAgentDaemonSetWithVolumes(t *testing.T) {
 
 	ns := framework.CreateNamespace(ctx, t, testCtx)
 	framework.SetupPrometheusRBAC(ctx, t, testCtx, ns)
-	
+
 	_, err := framework.CreateOrUpdatePrometheusOperatorWithOpts(
 		ctx, testFramework.PrometheusOperatorOpts{
 			Namespace:           ns,
@@ -869,7 +869,7 @@ func testPrometheusAgentDaemonSetWithVolumes(t *testing.T) {
 
 	name := "test-agent-with-volumes"
 	p := framework.MakeBasicPrometheusAgentDaemonSet(ns, name)
-	
+
 	// Add a simple volume and volumeMount to reproduce the bug
 	p.Spec.Volumes = []v1.Volume{
 		{
@@ -879,7 +879,7 @@ func testPrometheusAgentDaemonSetWithVolumes(t *testing.T) {
 			},
 		},
 	}
-	
+
 	p.Spec.VolumeMounts = []v1.VolumeMount{
 		{
 			Name:      "test-vol",
