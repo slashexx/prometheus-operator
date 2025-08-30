@@ -87,7 +87,7 @@ We will add a new `mode` field that accepts either `StatefulSet` or `DaemonSet`,
 
 #### 6.1.1 CEL Validation rules
 
-When `mode:DaemonSet`, the following CEL rules will be applied:
+When `mode:DaemonSet`, the following CEL rules will be applied to prevent access to these fields:
 
 - `replicas`
 - `storage`
