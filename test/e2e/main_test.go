@@ -426,16 +426,27 @@ const (
 func TestGatedFeatures(t *testing.T) {
 	skipFeatureGatedTests(t)
 	testFuncs := map[string]func(t *testing.T){
-		"CreatePrometheusAgentDaemonSet":               testCreatePrometheusAgentDaemonSet,
-		"PromAgentDaemonSetResourceUpdate":             testPromAgentDaemonSetResourceUpdate,
-		"PromAgentReconcileDaemonSetResourceUpdate":    testPromAgentReconcileDaemonSetResourceUpdate,
-		"PromAgentReconcileDaemonSetResourceDelete":    testPromAgentReconcileDaemonSetResourceDelete,
-		"PrometheusAgentDaemonSetSelectPodMonitor":     testPrometheusAgentDaemonSetSelectPodMonitor,
-		"PrometheusRetentionPolicies":                  testPrometheusRetentionPolicies,
-		"FinalizerWhenStatusForConfigResourcesEnabled": testFinalizerWhenStatusForConfigResourcesEnabled,
-		"PrometheusAgentDaemonSetCELValidations":       testPrometheusAgentDaemonSetCELValidations,
+		"CreatePrometheusAgentDaemonSet":                     testCreatePrometheusAgentDaemonSet,
+		"PromAgentDaemonSetResourceUpdate":                   testPromAgentDaemonSetResourceUpdate,
+		"PromAgentReconcileDaemonSetResourceUpdate":          testPromAgentReconcileDaemonSetResourceUpdate,
+		"PromAgentReconcileDaemonSetResourceDelete":          testPromAgentReconcileDaemonSetResourceDelete,
+		"PrometheusAgentDaemonSetSelectPodMonitor":           testPrometheusAgentDaemonSetSelectPodMonitor,
+		"PrometheusRetentionPolicies":                        testPrometheusRetentionPolicies,
+		"FinalizerWhenStatusForConfigResourcesEnabled":       testFinalizerWhenStatusForConfigResourcesEnabled,
+		"PrometheusAgentDaemonSetCELValidations":             testPrometheusAgentDaemonSetCELValidations,
+		"ServiceMonitorStatusSubresource":                    testServiceMonitorStatusSubresource,
+		"ServiceMonitorStatusWithMultipleWorkloads":          testServiceMonitorStatusWithMultipleWorkloads,
+		"GarbageCollectionOfServiceMonitorBinding":           testGarbageCollectionOfServiceMonitorBinding,
+		"RmServiceMonitorBindingDuringWorkloadDelete":        testRmServiceMonitorBindingDuringWorkloadDelete,
+		"PodMonitorStatusSubresource":                        testPodMonitorStatusSubresource,
+		"ProbeStatusSubresource":                             testProbeStatusSubresource,
+		"GarbageCollectionOfPodMonitorBinding":               testGarbageCollectionOfPodMonitorBinding,
+		"RmPodMonitorBindingDuringWorkloadDelete":            testRmPodMonitorBindingDuringWorkloadDelete,
+		"ScrapeConfigStatusSubresource":                      testScrapeConfigStatusSubresource,
+		"GarbageCollectionOfScrapeConfigBinding":             testGarbageCollectionOfScrapeConfigBinding,
+		"RmScrapeConfigBindingDuringWorkloadDelete":          testRmScrapeConfigBindingDuringWorkloadDelete,
+		"FinalizerForPromAgentWhenStatusForConfigResEnabled": testFinalizerForPromAgentWhenStatusForConfigResEnabled,
 		"PrometheusAgentDaemonSetWithVolumes":          testPrometheusAgentDaemonSetWithVolumes,
-		"ServiceMonitorStatusSubresource":              testServiceMonitorStatusSubresource,
 	}
 
 	for name, f := range testFuncs {
