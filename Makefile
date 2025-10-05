@@ -193,15 +193,15 @@ image: operator-image prometheus-config-reloader-image admission-webhook-image
 
 .PHONY: operator-image
 operator-image:
-	$(CONTAINER_CLI) build --build-arg ARCH=$(ARCH) --build-arg GOARCH=$(GOARCH) --build-arg OS=$(GOOS) -t $(IMAGE_OPERATOR):$(TAG) .
+	$(CONTAINER_CLI) build --platform=$(strip $(GOOS))/$(strip $(GOARCH)) --build-arg ARCH=$(ARCH) --build-arg GOARCH=$(GOARCH) --build-arg OS=$(strip $(GOOS)) --build-arg TARGETOS=$(strip $(GOOS)) --build-arg TARGETARCH=$(strip $(GOARCH)) -t $(IMAGE_OPERATOR):$(TAG) .
 
 .PHONY: prometheus-config-reloader-image
 prometheus-config-reloader-image:
-	$(CONTAINER_CLI) build --build-arg ARCH=$(ARCH) --build-arg GOARCH=$(GOARCH) --build-arg OS=$(GOOS) -t $(IMAGE_RELOADER):$(TAG) -f cmd/prometheus-config-reloader/Dockerfile .
+	$(CONTAINER_CLI) build --platform=$(strip $(GOOS))/$(strip $(GOARCH)) --build-arg ARCH=$(ARCH) --build-arg GOARCH=$(GOARCH) --build-arg OS=$(strip $(GOOS)) --build-arg TARGETOS=$(strip $(GOOS)) --build-arg TARGETARCH=$(strip $(GOARCH)) -t $(IMAGE_RELOADER):$(TAG) -f cmd/prometheus-config-reloader/Dockerfile .
 
 .PHONY: admission-webhook-image
 admission-webhook-image:
-	$(CONTAINER_CLI) build --build-arg ARCH=$(ARCH) --build-arg GOARCH=$(GOARCH) --build-arg OS=$(GOOS) -t $(IMAGE_WEBHOOK):$(TAG) -f cmd/admission-webhook/Dockerfile .
+	$(CONTAINER_CLI) build --platform=$(strip $(GOOS))/$(strip $(GOARCH)) --build-arg ARCH=$(ARCH) --build-arg GOARCH=$(GOARCH) --build-arg OS=$(strip $(GOOS)) --build-arg TARGETOS=$(strip $(GOOS)) --build-arg TARGETARCH=$(strip $(GOARCH)) -t $(IMAGE_WEBHOOK):$(TAG) -f cmd/admission-webhook/Dockerfile .
 
 .PHONY: update-go-deps
 update-go-deps:

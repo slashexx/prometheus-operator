@@ -1,8 +1,10 @@
 ARG ARCH=amd64
 ARG OS=linux
 ARG GOLANG_BUILDER=1.24
+ARG TARGETOS
+ARG TARGETARCH
 
-FROM quay.io/prometheus/golang-builder:${GOLANG_BUILDER}-base AS builder
+FROM --platform=${TARGETOS:-linux}/${TARGETARCH:-amd64} quay.io/prometheus/golang-builder:${GOLANG_BUILDER}-base AS builder
 WORKDIR /workspace
 
 COPY . .
